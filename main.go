@@ -2,12 +2,15 @@ package main
 
 import (
 	// "web-scraper/cmd"
-	"web-scraper/modules"
+	"web-scraper/gemini"
+	// "web-scraper/modules"
 )
 
 func main() {
 	// cmd.Execute()
 
-	modules.GetHackathonData()
+	// modules.GetHackathonData()
+
+	gemini.SummariseData()
 }
 // }
