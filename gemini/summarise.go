@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/google/generative-ai-go/genai"
 	"google.golang.org/api/option"
@@ -23,7 +24,8 @@ func printResponse(resp *genai.GenerateContentResponse) {
 
 func SummariseData() {
 ctx := context.Background()
-	client, err := genai.NewClient(ctx, option.WithAPIKey("AIzaSyDU_c3pGE9fhucPT0XRWUXYC8Y7sf9S_Iw"))
+	api_key := os.Getenv("GEMINI_API_KEY")
+	client, err := genai.NewClient(ctx, option.WithAPIKey(api_key))
 	if err != nil {
 		log.Fatal(err)
 	}
