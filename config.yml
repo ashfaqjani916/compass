@@ -1,0 +1,6 @@
+# This is a config file containing all the links and sources to fetch data
+
+
+hacakthon_sources: 
+  https://devfolio.co/hackathons/ 
+  https://devpost.com/hackathons/
