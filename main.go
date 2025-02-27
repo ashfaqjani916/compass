@@ -1,17 +1,13 @@
 package main
 
 import (
-	// "web-scraper/cmd"
-	"web-scraper/gemini"
-	// "web-scraper/modules"
+	"web-scraper/cmd"
+	// "web-scraper/gemini"
 )
 
 func main() {
-	// cmd.Execute()
-
-	// modules.GetHackathonData()
-
-	gemini.SummariseData()
+	cmd.Execute()
+	// gemini.SummariseData()
 }
 
 // }

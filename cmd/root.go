@@ -9,7 +9,7 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "web-scraper",
+	Use:   "compass",
 	Short: "A brief description of your application",
 	Long: `A longer description that spans multiple lines and likely contains
 examples and usage of using your application. For example:
@@ -29,6 +29,15 @@ var echoName = &cobra.Command{
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("helloooo",args[0])
+	},
+}
+
+var fetchHack = &cobra.Command{
+	Use: "fetchHack",
+	Short: "This command it to fetch the details of hackathons ",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("fetching hackathon details......................")
+		FetchHackathons()
 	},
 }
 
@@ -54,6 +63,7 @@ func init() {
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 	rootCmd.AddCommand(echoName)
+	rootCmd.AddCommand(fetchHack)
 }
 
 

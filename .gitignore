@@ -14,4 +14,5 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
-# End of https://mrkandreev.name/snippets/gitignore-generator/#Go
+# Build folder 
+/builds
