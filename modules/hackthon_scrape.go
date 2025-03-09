@@ -1,122 +1,66 @@
 package modules
 
 import (
+	"context"
 	"fmt"
 	"log"
-	"net/http"
-	"strings"
 	"sync"
+	"time"
 	"web-scraper/config"
 
-	"github.com/PuerkitoBio/goquery"
+	"github.com/chromedp/chromedp"
 )
-//
-// var mu sync.Mutex // Mutex to prevent race conditions while writing to CSV
-//
-// // fetchJob scrapes job data from given URLs and writes it to a CSV file
-// func fetchJob(jobs <-chan string, wg *sync.WaitGroup, csvFile *os.File) {
-// 	defer wg.Done()
-//
-// 	writer := csv.NewWriter(csvFile)
-//
-// 	for url := range jobs {
-// 		res, err := http.Get(url)
-// 		if err != nil {
-// 			log.Printf("Error while fetching data from %s: %v", url, err)
-// 			continue
-// 		}
-// 		defer res.Body.Close()
-//
-// 		doc, err := goquery.NewDocumentFromReader(res.Body)
-// 		if err != nil {
-// 			log.Printf("Error while parsing data from %s: %v", url, err)
-// 			continue
-// 		}
-//
-// 		// Find relevant job data
-// 		doc.Find("*").Each(func(index int, element *goquery.Selection) {
-// 			tag := element.Nodes[0].Data
-// 			attrs := ""
-// 			for _, attr := range element.Nodes[0].Attr {
-// 				attrs += fmt.Sprintf(` %s="%s"`, attr.Key, attr.Val)
-// 			}
-//
-// 			text := strings.TrimSpace(element.Text())
-//
-// 			// Write to CSV with thread safety
-// 			mu.Lock()
-// 			writer.Write([]string{url, tag, attrs, text})
-// 			mu.Unlock()
-// 		})
-// 	}
-//
-// 	writer.Flush() // Ensure all data is written
-// }
+
+
 
 func fetchJob(jobs <-chan string, wg *sync.WaitGroup) {
-	defer wg.Done()
+    defer wg.Done()
+ctx, cancel := chromedp.NewContext(context.Background())
+	defer cancel()
 
-	for url := range jobs {
-		res, err := http.Get(url)
-		if err != nil {
-			log.Printf("Error while fetching data from %s: %v", url, err)
-			continue
-		}
-		defer res.Body.Close()
+	ctx, cancel = context.WithTimeout(ctx, 40*time.Second)
+	defer cancel()
+    for url := range jobs {
 
-		doc, err := goquery.NewDocumentFromReader(res.Body)
-		if err != nil {
-			log.Printf("Error while parsing data from %s: %v", url, err)
-			continue 
-		}
 
-		// sc-hKMtZM sc-jSMfEi hackathonStatus-__StyledGrid-sc-347abc02-2 cwGkJu kGTbcK iGtZjp
-		doc.Find("a").Each(func(index int, element *goquery.Selection) {
-			tag := element.Nodes[0].Data
-			attrs := ""
-			for _, attr := range element.Nodes[0].Attr {
-				attrs += fmt.Sprintf(` %s="%s"`, attr.Key, attr.Val)
-			}
+	var names []string
 
-			text := strings.TrimSpace(element.Text())
-			fmt.Printf("<%s%s> %s\n", tag, attrs, text)
-		})
+	err := chromedp.Run(ctx,
+
+chromedp.Navigate(url),
+		chromedp.WaitVisible(`h3`, chromedp.ByQuery), // Wait for hackathon titles
+		chromedp.Sleep(5*time.Second),                // Wait for JS execution
+		chromedp.Evaluate(`Array.from(document.querySelectorAll("h3")).map(e => e.innerText)`, &names),
+			)
+
+	if err != nil {
+		log.Fatal("Scraping failed:", err)
 	}
+
+
+	fmt.Printf("\n=== Open Hackathons from %s  ===",url)
+	for i := range names {
+		fmt.Println(names[i])
+	}
+    }
 }
+
+
 
 func GetHackathonData() {
 	sources := config.FetchSource()
 	numJobs := len(sources)
-
 	jobs := make(chan string, numJobs)
-
-// csvFile, err := os.Create("jobs.csv")
-// 	if err != nil {
-// 		log.Fatalf("Could not create CSV file: %v", err)
-// 	}
-// 	defer csvFile.Close()
-//
-// 	// Write CSV headers
-// 	writer := csv.NewWriter(csvFile)
-// 	writer.Write([]string{"URL", "Tag", "Attributes", "Text Content"})
-// 	writer.Flush()
-//
-// 	for _, ele := range sources {
-// 		fmt.Println(ele)
-// 		jobs <- ele
-// 	}
-// 	close(jobs) 
-//
 	var wg sync.WaitGroup
-
-	// w signifies the number of goroutines at a time, 
-	// generally the range can be btw 2x to 5x for x number of cores in a processor
-	for w := 1; w <= 13; w++ {
+	numWorkers := 13
+	for w := 1; w <= numWorkers; w++ {
 		wg.Add(1) 
 		go fetchJob(jobs, &wg)
 	}
-
+	for _,url := range sources {
+		jobs <- url
+	}
+	close(jobs)
 	wg.Wait()
-
 	fmt.Println("Scraping finished!")
 }

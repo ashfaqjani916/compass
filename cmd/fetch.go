@@ -6,4 +6,6 @@ func FetchHackathons()  {
 	modules.GetHackathonData()
 }
 
-
+func FetchJobs() {
+	modules.GetJobData()
+}
