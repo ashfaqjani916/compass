@@ -3,7 +3,9 @@ package main
 import (
 	"log"
 
-	"web-scraper/modules"
+	"web-scraper/cmd"
+	// "web-scraper/modules"
+
 	"github.com/joho/godotenv"
 )
 
@@ -13,6 +15,7 @@ func main() {
   if err != nil { 
     log.Fatal("Error loading .env file")
   }
-	modules.GetHackathonData()
+	// modules.GetHackathonData()
+	cmd.Execute()
 }
 

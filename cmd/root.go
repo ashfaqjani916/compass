@@ -11,27 +11,22 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "compass",
 	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Long: `Welcome to Compass :The Ultimate Hackathon Scraper CLI`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
 }
 
 // here we will be writing a sample command to echo a name 
-
-var echoName = &cobra.Command{
-	Use: "echo [name]",
-	Args: cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("helloooo",args[0])
-	},
-}
-
+//
+// var echoName = &cobra.Command{
+// 	Use: "echo [name]",
+// 	Args: cobra.ExactArgs(1),
+// 	Run: func(cmd *cobra.Command, args []string) {
+// 		fmt.Println("helloooo",args[0])
+// 	},
+// }
+//
 var fetchHack = &cobra.Command{
 	Use: "fetchHack",
 	Short: "This command it to fetch the details of hackathons ",
@@ -60,9 +55,9 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
-	rootCmd.AddCommand(echoName)
+	// rootCmd.AddCommand(echoName)
 	rootCmd.AddCommand(fetchHack)
 }
 
