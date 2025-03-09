@@ -1,30 +1,26 @@
-
-# 🧭 Compass: The Ultimate Hackathon & Job Scraper CLI  
-*Find hackathons. Hunt jobs. Summarize everything. Like a boss.*  
-
+# 🧭 Compass: The Ultimate Hackathon Scraper CLI  
+*Find hackathons. Summarize everything. Like a boss.*  
 
 ---
 
 ## **🔥 What is Compass?**  
-**Compass** is a **lightning-fast** CLI tool that scrapes **hackathons & job listings**, feeds them to **Google’s Gemini AI**, and spits out bullet-pointed summaries.  
+**Compass** is a **lightning-fast** CLI tool that scrapes **hackathon listings concurrently**, fetching details from multiple sources at once.  
 No more endless scrolling—Compass does the dirty work for you.  
 
 ---
 
-## **⚡ Features**
-✅ **Scrapes hackathons & jobs** from multiple sources  
-✅ **Summarizes opportunities** using Gemini API  
-✅ **Blazing fast** concurrency-powered scraping  
-✅ **CLI first** – no bloated UI, just raw speed  
-✅ **Filter jobs** by location, remote-only, and category  
+## **⚡ Features**  
+✅ **Fetches hackathons concurrently** for maximum speed  
+✅ **Blazing fast** – powered by Go’s concurrency model  
+✅ **CLI first** – no bloated UI, just raw efficiency  
 ✅ **Output as JSON, Markdown, or plain text**  
 
 ---
 
 ## **🛠 Installation**  
-### **For the impatient 🏃💨**
 ```sh
 git clone https://github.com/ashfaqjani916/compass.git
 cd compass
-go build -o compass
-./compass --help
+chmod +x install.sh
+./install.sh
+compass --help  # Verify installation and see available commands
